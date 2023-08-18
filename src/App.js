@@ -13,6 +13,8 @@ import { format } from 'date-fns';
 import api from './api/posts'
 import EditPost from './EditPost';
 
+import useWindowSize from './hooks/useWindowSize';
+
 function App() {
 
   const [posts,setPosts] = useState([])
@@ -24,6 +26,7 @@ function App() {
   const [editTitle,setEditTitle] = useState('')
   const [editBody,setEditBody] = useState('')
   const history = useNavigate()
+  const {width} = useWindowSize()
 
 
   useEffect(() => {
@@ -109,7 +112,7 @@ function App() {
   return (
     <div className="App">
 
-      <Header title="ReactJs Blog"/>
+      <Header title="ReactJs Blog" width={width}/>
       <Nav search={search} setSearch={setSearch} />
 
       <Routes>
