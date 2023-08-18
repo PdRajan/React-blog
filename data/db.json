@@ -23,6 +23,18 @@
       "title": "Yo, thats my new post",
       "dateTime": "August 18, 2023 6:27:52 AM",
       "body": "no go to home"
+    },
+    {
+      "id": 5,
+      "title": "just checkin'",
+      "dateTime": "August 19, 2023 4:37:35 AM",
+      "body": "yo\n"
+    },
+    {
+      "id": 6,
+      "title": "new post 6",
+      "dateTime": "August 19, 2023 5:15:03 AM",
+      "body": "this is post 6\n"
     }
   ]
 }

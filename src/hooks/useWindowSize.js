@@ -1,4 +1,3 @@
-import { cleanup } from "@testing-library/react";
 import { useState,useEffect } from "react";
 
 const useWindowSize = () => {

@@ -10,7 +10,6 @@ const Missing = () => {
         <Link to='/'>Visit Our Homepage</Link>
       </p>
 
-
     </main>
   )
 }
