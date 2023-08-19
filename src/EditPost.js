@@ -1,31 +1,29 @@
-import { useEffect,useState } from 'react'
-import { Link, useParams,useNavigate } from 'react-router-dom'
-import { useContext } from 'react'
-import DataContext from './context/DataContext'
+import { useEffect } from 'react'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
-import api from './api/posts'
+import { useStoreState,useStoreActions } from 'easy-peasy';
 
 const EditPost = () => {
     const history = useNavigate()
-    const [editTitle, setEditTitle] = useState('')
-    const [editBody, setEditBody] = useState('')
-    const { posts,setPosts } = useContext(DataContext)
     const { id } = useParams()
-    const post = posts.find(post => (post.id).toString() === id)
 
-    const handleEdit = async (id) => {
+
+    const editTitle = useStoreState((state) => state.editTitle)
+    const editBody = useStoreState((state) => state.editBody)
+
+    const editPost = useStoreActions((actions) => actions.editPost)
+    const setEditTitle = useStoreActions((actions) => actions.setEditTitle)
+    const setEditBody = useStoreActions((actions) => actions.setEditBody)
+
+
+    const getPostById = useStoreState((state) => state.getPostById)
+    const post = getPostById(id)
+
+    const handleEdit = (id) => {
         const dateTime = format(new Date(), 'MMMM dd, yyyy pp')
         const updatedPost = { id, title: editTitle, dateTime, body: editBody }
-
-        try {
-            const response = await api.put(`/posts/${id}`, updatedPost)
-            setPosts(posts.map(post => post.id === id ? { ...response.data } : post))
-            setEditBody('')
-            setEditTitle('')
-            history('/')
-        } catch (err) {
-            console.log(`Error : ${err.message}`)
-        }
+        editPost(updatedPost)
+        history(`/post/${id}`)
     }
 
     useEffect(() => {
@@ -57,20 +55,20 @@ const EditPost = () => {
                             value={editBody}
                             onChange={(e) => setEditBody(e.target.value)}
                         />
-                        <button type='submit' onClick={() => handleEdit(post.id)}>Submit</button>
+                        <button type='button' onClick={() => handleEdit(post.id)}>Submit</button>
                     </form>
                 </>
             }
-            { !editTitle && 
-            <>
-              <h2>Page not Found</h2>
-              <p>Well, that's Disappointing</p>
-              <p>
-                <Link to='/'>Visit Our Homepage</Link>
-              </p>
-              
-            </>
-          }
+            {!editTitle &&
+                <>
+                    <h2>Page not Found</h2>
+                    <p>Well, that's Disappointing</p>
+                    <p>
+                        <Link to='/'>Visit Our Homepage</Link>
+                    </p>
+
+                </>
+            }
         </main>
 
     )

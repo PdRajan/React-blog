@@ -1,33 +1,26 @@
-import { useState, useContext } from 'react'
-import DataContext from './context/DataContext'
 import { useNavigate } from 'react-router-dom'
-import api from './api/posts'
+import { useStoreState, useStoreActions, action } from 'easy-peasy'
 import { format } from 'date-fns';
 
 const NewPost = () => {
 
-  const { posts, setPosts } = useContext(DataContext)
-  const [postTitle, setPostTitle] = useState('')
-  const [postBody, setPostBody] = useState('')
   const history = useNavigate()
 
-  const handleSubmit = async (e) => {
+  const posts = useStoreState((state) => state.posts)
+  const postTitle = useStoreState((state) => state.postTitle)
+  const postBody = useStoreState((state) => state.postBody)
+
+  const savePost = useStoreActions((actions)=> actions.savePost)
+  const setPostTitle = useStoreActions((actions)=> actions.setPostTitle)
+  const setPostBody = useStoreActions((actions)=> actions.setPostBody)
+
+  const handleSubmit = (e) => {
     e.preventDefault()
     const id = posts.length ? (posts[posts.length - 1].id + 1) : 1
     const dateTime = format(new Date(), 'MMMM dd, yyyy pp')
     const newPost = { id, title: postTitle, dateTime, body: postBody }
-    try {
-
-      const response = await api.post('/posts', newPost)
-      const allPosts = [...posts, response.data]
-
-      setPosts(allPosts)
-      setPostBody('')
-      setPostTitle('')
-      history('/')
-    } catch (err) {
-      console.log(`Error : ${err.message}`)
-    }
+    savePost(newPost)
+    history("/")
   }
 
   return (
